@@ -1,0 +1,25 @@
+			Help
+
+Encryption :
+		How to encrypt data using this program
+
+		Steps for the encryption :
+
+		1.Create/select a file which you want to Encrypt
+		2.Choose the Fuction Encryption and give a space and enter the file name.
+		3.Press enter the it will ask for the key. Remember you should use a valid key and the key should not known by any one like 			a passowrd.
+		4.enter your key.
+		5.your file is encrypt and saved at encryptf folder.
+		6.Finish
+		
+Decryption : 
+		How decrypt the data using this program
+
+		Steps for the decryption :
+
+		1.Create/select a file which you want to Decrypt.
+		2.Choose the Fuction Decryption and give a space and enter the file name.
+		3.Press enter the it will ask for the key. Remember you should use a valid key(the same key which is used at time of 			encryption) and the key should not known by any one like a passowrd.
+		4.enter your key.
+		5.Your file is decrypted and saved at decryptf folder.
+		6.Finish
