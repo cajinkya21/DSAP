@@ -283,7 +283,7 @@ int main( int argc, char *argv[] )
 
         if( ( filesize & 0x0F ) != 0 )
         {
-            mbedtls_fprintf( stderr, "File size not a multiple of 16.\n" );
+            mbedtls_fprintf( stderr, "The file contains plain text so it can not be decrypted \n" );
             goto exit;
         }
 
