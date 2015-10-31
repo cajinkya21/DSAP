@@ -1,4 +1,4 @@
 try :	
 	cc *.h  
-	cc *.c -o proj
-	
+	cc *.c -c  
+	cc *.o -o project
