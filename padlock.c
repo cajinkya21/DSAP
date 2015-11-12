@@ -1,3 +1,21 @@
+/*****************************************************************************
+ * Copyright (C) Ajinkya G.C cajinkya21@gmail.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
+
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "config.h"
 #else
@@ -19,13 +37,11 @@
 /*
  * PadLock detection routine
  */
-int mbedtls_padlock_has_support( int feature )
-{
+int mbedtls_padlock_has_support( int feature ) {
     static int flags = -1;
     int ebx = 0, edx = 0;
 
-    if( flags == -1 )
-    {
+    if( flags == -1 ) {
         asm( "movl  %%ebx, %0           \n\t"
              "movl  $0xC0000000, %%eax  \n\t"
              "cpuid                     \n\t"
@@ -50,11 +66,7 @@ int mbedtls_padlock_has_support( int feature )
 /*
  * PadLock AES-ECB block en(de)cryption
  */
-int mbedtls_padlock_xcryptecb( mbedtls_aes_context *ctx,
-                       int mode,
-                       const unsigned char input[16],
-                       unsigned char output[16] )
-{
+int mbedtls_padlock_xcryptecb( mbedtls_aes_context *ctx, int mode, const unsigned char input[16], unsigned char output[16] ) {
     int ebx = 0;
     uint32_t *rk;
     uint32_t *blk;
@@ -90,13 +102,7 @@ int mbedtls_padlock_xcryptecb( mbedtls_aes_context *ctx,
 /*
  * PadLock AES-CBC buffer en(de)cryption
  */
-int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx,
-                       int mode,
-                       size_t length,
-                       unsigned char iv[16],
-                       const unsigned char *input,
-                       unsigned char *output )
-{
+int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx, int mode, size_t length, unsigned char iv[16], const unsigned char *input, unsigned char *output ) {
     int ebx = 0;
     size_t count;
     uint32_t *rk;

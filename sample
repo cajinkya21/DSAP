@@ -1,0 +1,55 @@
+Clone the repository located at <repo> onto the local machine. The original repository can be located on the local filesystem or on a remote machine accessible via HTTP or SSH.
+
+git clone <repo> <directory>
+Clone the repository located at <repo> into the folder called <directory> on the local machine.
+
+Discussion
+If a project has already been set up in a central repository, the git clone command is the most common way for users to obtain a development copy. Like git init, cloning is generally a one-time operation—once a developer has obtained a working copy, all version control operations and collaborations are managed through their local repository.
+
+Repo-To-Repo Collaboration
+It’s important to understand that Git’s idea of a “working copy” is very different from the working copy you get by checking out code from an SVN repository. Unlike SVN, Git makes no distinction between the working copy and the central repository—they are all full-fledged Git repositories.
+
+This makes collaborating with Git fundamentally different than with SVN. Whereas SVN depends on the relationship between the central repository and the working copy, Git’s collaboration model is based on repository-to-repository interaction. Instead of checking a working copy into SVN’s central repository, you push or pull commits from one repository to another.
+
+Git Tutorial: Repo to Working Copy Collaboration
+ Git Tutorial: Repo to Repo Collaboration
+Of course, there’s nothing stopping you from giving certain Git repos special meaning. For example, by simply designating one Git repo as the “central” repository, it’s possible to replicate a Centralized workflow using Git. The point is, this is accomplished through conventions rather than being hardwired into the VCS itself.
+
+Example
+The example below demonstrates how to obtain a local copy of a central repository stored on a server accessible at example.com using the SSH username john:
+
+git clone ssh://john@example.com/path/to/my-project.git 
+cd my-project
+# Start working on the project
+The first command initializes a new Git repository in the my-project folder on your local machine and populates it with the contents of the central repository. Then, you can cd into the project and start editing files, committing snapshots, and interacting with other repositories. Also note that the .git extension is omitted from the cloned repository. This reflects the non-bare status of the local copy.
+
+git config
+
+The git config command lets you configure your Git installation (or an individual repository) from the command line. This command can define everything from user info to preferences to the behavior of a repository. Several common configuration options are listed below.
+
+Usage
+git config user.name <name>
+
+Define the author name to be used for all commits in the current repository. Typically, you’ll want to use the --global flag to set configuration options for the current user.
+
+git config --global user.name <name>
+Define the author name to be used for all commits by the current user.
+
+git config --global user.email <email>
+Define the author email to be used for all commits by the current user.
+
+git config --global alias.<alias-name> <git-command>
+Create a shortcut for a Git command.
+
+git config --system core.editor <editor>
+Define the text editor used by commands like git commit for all users on the current machine. The <editor> argument should be the command that launches the desired editor (e.g., vi).
+
+git config --global --edit
+Open the global configuration file in a text editor for manual editing.
+
+Discussion
+All configuration options are stored in plaintext files, so the git config command is really just a convenient command-line interface. Typically, you’ll only need to configure a Git installation the first time you start working on a new development machine, and for virtually all cases, you’ll want to use the --global flag.
+
+Git stores configuration options in three separate files, which lets you scope options to individual repositories, users, or the entire system:
+
+<repo>/.git/config – Repository-specific settings.

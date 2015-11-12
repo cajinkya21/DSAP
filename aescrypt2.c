@@ -1,3 +1,21 @@
+/*****************************************************************************
+ * Copyright (C) Ajinkya G.C cajinkya21@gmail.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
+
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "config.h"
 #else
@@ -40,16 +58,14 @@
 
 #if !defined(MBEDTLS_AES_C) || !defined(MBEDTLS_SHA256_C) || \
     !defined(MBEDTLS_FS_IO) || !defined(MBEDTLS_MD_C)
-int main( void )
-{
+int main( void ) {
     mbedtls_printf("MBEDTLS_AES_C and/or MBEDTLS_SHA256_C "
                     "and/or MBEDTLS_FS_IO and/or MBEDTLS_MD_C "
                     "not defined.\n");
     return( 0 );
 }
 #else
-int main( int argc, char *argv[] )
-{
+int main( int argc, char *argv[] ) {
     int ret = 1;
 
     int i, n;
@@ -79,8 +95,7 @@ int main( int argc, char *argv[] )
     mbedtls_aes_init( &aes_ctx );
     mbedtls_md_init( &sha_ctx );
 
-    if( argc != 5 )
-    {
+    if( argc != 5 ) {
         mbedtls_printf( USAGE );
 
 #if defined(_WIN32)
@@ -97,26 +112,22 @@ int main( int argc, char *argv[] )
     memset(digest, 0, sizeof(digest));
     memset(buffer, 0, sizeof(buffer));
 
-    if( mode != MODE_ENCRYPT && mode != MODE_DECRYPT )
-    {
+    if( mode != MODE_ENCRYPT && mode != MODE_DECRYPT ) {
         mbedtls_fprintf( stderr, "invalide operation mode\n" );
         goto exit;
     }
 
-    if( strcmp( argv[2], argv[3] ) == 0 )
-    {
+    if( strcmp( argv[2], argv[3] ) == 0 ) {
         mbedtls_fprintf( stderr, "input and output filenames must differ\n" );
         goto exit;
     }
 
-    if( ( fin = fopen( argv[2], "rb" ) ) == NULL )
-    {
+    if( ( fin = fopen( argv[2], "rb" ) ) == NULL ) {
         mbedtls_fprintf( stderr, "fopen(%s,rb) failed\n", argv[2] );
         goto exit;
     }
 
-    if( ( fout = fopen( argv[3], "wb+" ) ) == NULL )
-    {
+    if( ( fout = fopen( argv[3], "wb+" ) ) == NULL ) {
         mbedtls_fprintf( stderr, "fopen(%s,wb+) failed\n", argv[3] );
         goto exit;
     }
@@ -124,27 +135,21 @@ int main( int argc, char *argv[] )
     /*
      * Read the secret key and clean the command line.
      */
-    if( ( fkey = fopen( argv[4], "rb" ) ) != NULL )
-    {
+    if( ( fkey = fopen( argv[4], "rb" ) ) != NULL ) {
         keylen = fread( key, 1, sizeof( key ), fkey );
         fclose( fkey );
     }
-    else
-    {
-        if( memcmp( argv[4], "hex:", 4 ) == 0 )
-        {
+    else {
+        if( memcmp( argv[4], "hex:", 4 ) == 0 ) {
             p = &argv[4][4];
             keylen = 0;
 
-            while( sscanf( p, "%02X", &n ) > 0 &&
-                   keylen < (int) sizeof( key ) )
-            {
+            while( sscanf( p, "%02X", &n ) > 0 && keylen < (int) sizeof( key ) ){
                 key[keylen++] = (unsigned char) n;
                 p += 2;
             }
         }
-        else
-        {
+        else {
             keylen = strlen( argv[4] );
 
             if( keylen > (int) sizeof( key ) )
@@ -168,30 +173,26 @@ int main( int argc, char *argv[] )
         SetFilePointer( (HANDLE) _get_osfhandle( _fileno( fin ) ),
                         li_size.LowPart, &li_size.HighPart, FILE_END );
 
-    if( li_size.LowPart == 0xFFFFFFFF && GetLastError() != NO_ERROR )
-    {
+    if( li_size.LowPart == 0xFFFFFFFF && GetLastError() != NO_ERROR ) {
         mbedtls_fprintf( stderr, "SetFilePointer(0,FILE_END) failed\n" );
         goto exit;
     }
 
     filesize = li_size.QuadPart;
 #else
-    if( ( filesize = lseek( fileno( fin ), 0, SEEK_END ) ) < 0 )
-    {
+    if( ( filesize = lseek( fileno( fin ), 0, SEEK_END ) ) < 0 ) {
         perror( "lseek" );
         goto exit;
     }
 #endif
 #endif
 
-    if( fseek( fin, 0, SEEK_SET ) < 0 )
-    {
+    if( fseek( fin, 0, SEEK_SET ) < 0 ) {
         mbedtls_fprintf( stderr, "fseek(0,SEEK_SET) failed\n" );
         goto exit;
     }
 
-    if( mode == MODE_ENCRYPT )
-    {
+    if( mode == MODE_ENCRYPT ) {
       
         for( i = 0; i < 8; i++ )
             buffer[i] = (unsigned char)( filesize >> ( i << 3 ) );
@@ -212,8 +213,7 @@ int main( int argc, char *argv[] )
             ( ( IV[15] & 0xF0 ) | lastn );
 
         
-        if( fwrite( IV, 1, 16, fout ) != 16 )
-        {
+        if( fwrite( IV, 1, 16, fout ) != 16 ) {
             mbedtls_fprintf( stderr, "fwrite(%d bytes) failed\n", 16 );
             goto exit;
         }
@@ -221,8 +221,7 @@ int main( int argc, char *argv[] )
         memset( digest, 0,  32 );
         memcpy( digest, IV, 16 );
 
-        for( i = 0; i < 8192; i++ )
-        {
+        for( i = 0; i < 8192; i++ ) {
             mbedtls_md_starts( &sha_ctx );
             mbedtls_md_update( &sha_ctx, digest, 32 );
             mbedtls_md_update( &sha_ctx, key, keylen );
@@ -234,13 +233,11 @@ int main( int argc, char *argv[] )
         mbedtls_md_hmac_starts( &sha_ctx, digest, 32 );
 
        
-        for( offset = 0; offset < filesize; offset += 16 )
-        {
+        for( offset = 0; offset < filesize; offset += 16 ) {
             n = ( filesize - offset > 16 ) ? 16 : (int)
                 ( filesize - offset );
 
-            if( fread( buffer, 1, n, fin ) != (size_t) n )
-            {
+            if( fread( buffer, 1, n, fin ) != (size_t) n ) {
                 mbedtls_fprintf( stderr, "fread(%d bytes) failed\n", n );
                 goto exit;
             }
@@ -251,8 +248,7 @@ int main( int argc, char *argv[] )
             mbedtls_aes_crypt_ecb( &aes_ctx, MBEDTLS_AES_ENCRYPT, buffer, buffer );
             mbedtls_md_hmac_update( &sha_ctx, buffer, 16 );
 
-            if( fwrite( buffer, 1, 16, fout ) != 16 )
-            {
+            if( fwrite( buffer, 1, 16, fout ) != 16 ) {
                 mbedtls_fprintf( stderr, "fwrite(%d bytes) failed\n", 16 );
                 goto exit;
             }
@@ -265,24 +261,20 @@ int main( int argc, char *argv[] )
          */
         mbedtls_md_hmac_finish( &sha_ctx, digest );
 
-        if( fwrite( digest, 1, 32, fout ) != 32 )
-        {
+        if( fwrite( digest, 1, 32, fout ) != 32 ) {
             mbedtls_fprintf( stderr, "fwrite(%d bytes) failed\n", 16 );
             goto exit;
         }
     }
 
-    if( mode == MODE_DECRYPT )
-    {
+    if( mode == MODE_DECRYPT ) {
         unsigned char tmp[16];
-        if( filesize < 48 )
-        {
+        if( filesize < 48 ) {
             mbedtls_fprintf( stderr, "File too short to be encrypted.\n" );
             goto exit;
         }
 
-        if( ( filesize & 0x0F ) != 0 )
-        {
+        if( ( filesize & 0x0F ) != 0 ) {
             mbedtls_fprintf( stderr, "The file contains plain text so it can not be decrypted \n" );
             goto exit;
         }
@@ -295,8 +287,7 @@ int main( int argc, char *argv[] )
         /*
          * Read the IV and original filesize modulo 16.
          */
-        if( fread( buffer, 1, 16, fin ) != 16 )
-        {
+        if( fread( buffer, 1, 16, fin ) != 16 ) {
             mbedtls_fprintf( stderr, "fread(%d bytes) failed\n", 16 );
             goto exit;
         }
@@ -306,8 +297,7 @@ int main( int argc, char *argv[] )
         memset( digest, 0,  32 );
         memcpy( digest, IV, 16 );
 
-        for( i = 0; i < 8192; i++ )
-        {
+        for( i = 0; i < 8192; i++ ) {
             mbedtls_md_starts( &sha_ctx );
             mbedtls_md_update( &sha_ctx, digest, 32 );
             mbedtls_md_update( &sha_ctx, key, keylen );
@@ -321,10 +311,8 @@ int main( int argc, char *argv[] )
         /*
          * Decrypt and write the plaintext.
          */
-        for( offset = 0; offset < filesize; offset += 16 )
-        {
-            if( fread( buffer, 1, 16, fin ) != 16 )
-            {
+        for( offset = 0; offset < filesize; offset += 16 ) {
+            if( fread( buffer, 1, 16, fin ) != 16 ) {
                 mbedtls_fprintf( stderr, "fread(%d bytes) failed\n", 16 );
                 goto exit;
             }
@@ -342,8 +330,7 @@ int main( int argc, char *argv[] )
             n = ( lastn > 0 && offset == filesize - 16 )
                 ? lastn : 16;
 
-            if( fwrite( buffer, 1, n, fout ) != (size_t) n )
-            {
+            if( fwrite( buffer, 1, n, fout ) != (size_t) n ) {
                 mbedtls_fprintf( stderr, "fwrite(%d bytes) failed\n", n );
                 goto exit;
             }
@@ -354,8 +341,7 @@ int main( int argc, char *argv[] )
          */
         mbedtls_md_hmac_finish( &sha_ctx, digest );
 
-        if( fread( buffer, 1, 32, fin ) != 32 )
-        {
+        if( fread( buffer, 1, 32, fin ) != 32 ) {
             mbedtls_fprintf( stderr, "fread(%d bytes) failed\n", 32 );
             goto exit;
         }
@@ -365,8 +351,7 @@ int main( int argc, char *argv[] )
         for( i = 0; i < 32; i++ )
             diff |= digest[i] ^ buffer[i];
 
-        if( diff != 0 )
-        {
+        if( diff != 0 ) {
             mbedtls_fprintf( stderr, "HMAC check failed: wrong key, "
                              "or file corrupted.\n" );
             goto exit;
