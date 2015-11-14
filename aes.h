@@ -1,13 +1,3 @@
-#ifndef MBEDTLS_AES_H
-#define MBEDTLS_AES_H
-
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
-
-#include <stddef.h>
 /*****************************************************************************
  * Copyright (C) Ajinkya G.C cajinkya21@gmail.com
  *
@@ -26,6 +16,16 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
  *****************************************************************************/
 
+#ifndef MBEDTLS_AES_H
+#define MBEDTLS_AES_H
+
+#if !defined(MBEDTLS_CONFIG_FILE)
+#include "config.h"
+#else
+#include MBEDTLS_CONFIG_FILE
+#endif
+
+#include <stddef.h>
 #include <stdint.h>
 
 /* padlock.c and aesni.c rely on these values! */
