@@ -1,9 +1,9 @@
 /*****************************************************************************
- * Copyright (C) Ajinkya G.C cajinkya21@gmail.com
+ * Copyright (C) Ajinkya Geetanand Chavan cajinkya21@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * the Free Software Foundation; either version 3.0 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
