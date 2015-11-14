@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (C) Ajinkya G.C. cajinkya21@gmail.com
+ * Copyright (C) Ajinkya G.C cajinkya21@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
